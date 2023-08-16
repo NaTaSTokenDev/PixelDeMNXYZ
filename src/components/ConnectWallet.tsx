@@ -1,13 +1,13 @@
+import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { TezosToolkit } from "@taquito/taquito";
+import { BeaconWallet } from "@taquito/beacon-wallet";
 import {
-  BeaconEvent,
-  defaultEventCallbacks,
   NetworkType,
+  BeaconEvent,
+  defaultEventCallbacks
 } from "@airgap/beacon-sdk";
 import TransportU2F from "@ledgerhq/hw-transport-u2f";
-import { BeaconWallet } from "@taquito/beacon-wallet";
 import { LedgerSigner } from "@taquito/ledger-signer";
-import { TezosToolkit } from "@taquito/taquito";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 type ButtonProps = {
   Tezos: TezosToolkit;
@@ -32,7 +32,7 @@ const ConnectButton = ({
   contractAddress,
   setBeaconConnection,
   setPublicToken,
-  wallet,
+  wallet
 }: ButtonProps): JSX.Element => {
   const [loadingNano, setLoadingNano] = useState<boolean>(false);
 
@@ -45,7 +45,12 @@ const ConnectButton = ({
     const contract = await Tezos.wallet.at(contractAddress);
     const storage: any = await contract.storage();
     setContract(contract);
-    // setStorage(storage.toNumber());
+    setStorage(storage);
+  };
+
+  const connectNowallet = async (): Promise<void> => {
+    setBeaconConnection(true);
+    await setup("tz1fBautaGXNc5xDR4GC61YXv5wM7Hb6jxNt");
   };
 
   const connectWallet = async (): Promise<void> => {
@@ -53,8 +58,8 @@ const ConnectButton = ({
       await wallet.requestPermissions({
         network: {
           type: NetworkType.MAINNET,
-          rpcUrl: "https://mainnet.api.tez.ie",
-        },
+          rpcUrl: "https://mainnet.api.tez.ie"
+        }
       });
       // gets user's address
       const userAddress = await wallet.getPKH();
@@ -86,18 +91,18 @@ const ConnectButton = ({
     (async () => {
       // creates a wallet instance
       const wallet = new BeaconWallet({
-        name: "PixelDeMNXYZ",
+        name: "PixelDeMNsXYZ",
         preferredNetwork: NetworkType.MAINNET,
         disableDefaultEvents: true, // Disable all events / UI. This also disables the pairing alert.
         eventHandlers: {
           // To keep the pairing alert, we have to add the following default event handlers back
           [BeaconEvent.PAIR_INIT]: {
-            handler: defaultEventCallbacks.PAIR_INIT,
+            handler: defaultEventCallbacks.PAIR_INIT
           },
           [BeaconEvent.PAIR_SUCCESS]: {
-            handler: (data) => setPublicToken(data.publicKey),
-          },
-        },
+            handler: data => setPublicToken(data.publicKey)
+          }
+        }
       });
       Tezos.setWalletProvider(wallet);
       setWallet(wallet);
@@ -113,12 +118,12 @@ const ConnectButton = ({
 
   return (
     <div className="buttons">
-      <button className="button" onClick={connectWallet}>
+      <button className="button-a" onClick={connectWallet}>
         <span>
-          <i className="fas fa-wallet"></i>&nbsp;Connect w/ wallet
+          <i className="fas fa-wallet"></i>&nbsp; Connect with wallet
         </span>
       </button>
-      <button className="button" disabled={loadingNano} onClick={connectNano}>
+      <button className="button-a" disabled={loadingNano} onClick={connectNano}>
         {loadingNano ? (
           <span>
             <i className="fas fa-spinner fa-spin"></i>&nbsp; Loading, please
@@ -126,12 +131,18 @@ const ConnectButton = ({
           </span>
         ) : (
           <span>
-            <i className="fab fa-usb"></i>&nbsp;Connect w/ Ledger Nano
+            <i className="fab fa-usb"></i>&nbsp; Connect with Ledger Nano
           </span>
         )}
+      </button>
+      <button className="button-a" onClick={connectNowallet}>
+        <span>
+          <i className="fas fa-wallet"></i>&nbsp; Browse as a guest without a wallet
+        </span>
       </button>
     </div>
   );
 };
 
 export default ConnectButton;
+

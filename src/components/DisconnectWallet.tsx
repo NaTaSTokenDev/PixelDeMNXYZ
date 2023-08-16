@@ -1,6 +1,6 @@
 import { BeaconWallet } from "@taquito/beacon-wallet";
 import { TezosToolkit } from "@taquito/taquito";
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface ButtonProps {
   wallet: BeaconWallet | null;
@@ -22,11 +22,11 @@ const DisconnectButton = ({
   setBeaconConnection,
 }: ButtonProps): JSX.Element => {
   const disconnectWallet = async (): Promise<void> => {
-    //window.localStorage.clear();
+    window.localStorage.clear();
     setUserAddress("");
     setUserBalance(0);
     setWallet(null);
-    const tezosTK = new TezosToolkit("https://api.tez.ie/rpc/granadanet");
+    const tezosTK = new TezosToolkit("https://mainnet.api.tez.ie");
     setTezos(tezosTK);
     setBeaconConnection(false);
     setPublicToken(null);
@@ -39,11 +39,28 @@ const DisconnectButton = ({
   };
 
   return (
-    <div className="buttons">
-      <button className="button" onClick={disconnectWallet}>
-        <i className="fas fa-times"></i>&nbsp; Disconnect wallet
-      </button>
-    </div>
+<div className="disconnect-container">
+<div className="image-container">
+<a href="https://discord.gg/9UTJgTsHCW" target="_blank" rel="noopener noreferrer">
+      <img
+        src="/images/discord.png"
+        width="50"
+        alt="Discord Logo"
+      />
+    </a>
+    <a href="https://twitter.com/NatasToken" target="_blank" rel="noopener noreferrer">
+      <img
+        src="/images/twitter.png"
+        width="50"
+        alt="Twitter Logo"
+      />
+    </a>
+  </div>
+  <button className="disconnect-button" onClick={disconnectWallet}>
+    <i className="fas fa-times"></i>&nbsp; Disconnect
+  </button>
+
+</div>
   );
 };
 

@@ -1,0 +1,28 @@
+useEffect(() => {
+    const regex = /PixelDeMNs|Series|#|"|'/g;
+    const cleanedArray = combinedData.map((item) => {
+      if (typeof item === 'string') {
+        return item.replace(regex, '').trim();
+      }
+      return item;
+    });
+
+    const filteredArray = cleanedArray.filter((item) => item !== '');
+    setCleanedArray(filteredArray);
+  }, [combinedData]);
+ function parseSelectedPixelDeMNs(selectedPixelDeMNs: string) {
+    console.log(selectedPixelDeMNs, "selected")
+    const regex = /PixelDeMN\s*([A-Za-z0-9]+)\s*(\d+)/;
+
+    const match = selectedPixelDeMNs.match(regex);
+
+    if (match) {
+      const series = match[1]; // Contains the Series part (e.g., "V")
+      const number = parseInt(match[2]); // Contains the number part (e.g., 98)
+      const source1 = `images/Series ${series}/${number}.png`;
+      console.log(source1, "source1")
+      return { series, number, source1 };
+    } else {
+      return null;
+    }
+  }

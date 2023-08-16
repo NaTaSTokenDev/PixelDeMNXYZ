@@ -13,7 +13,6 @@ const GetBurnedDeMNs = ({ myuserAddress }: DemnBalanceProps) => {
   if (data) {
     {
       if (data[0] != undefined) {
-        console.log(data)
         let num = data[0] 
         num = num / Math.pow(10, 8);
         return <span>{num}</span>;
@@ -23,7 +22,6 @@ const GetBurnedDeMNs = ({ myuserAddress }: DemnBalanceProps) => {
   return (
     <div>
     <p>0</p>
-    {console.log(data)}
   </div>
   )
 };
